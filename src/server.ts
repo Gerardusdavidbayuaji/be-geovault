@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 
 import selectRoutes from "./routes/selectRoutes";
+import uploadRoutes from "./routes/uploadRoutes";
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api", selectRoutes);
+app.use("/api", uploadRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on port: ${PORT}`);
