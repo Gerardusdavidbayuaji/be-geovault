@@ -36,4 +36,15 @@ router.get("/tahun", async (req, res) => {
   }
 });
 
+router.get("/datas", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM uploads ORDER BY uploaded_at ASC"
+    );
+    res.json(result.rows);
+  } catch (error) {
+    res.status(500).json({ error: "Gagal mengambil semua data" });
+  }
+});
+
 export default router;
