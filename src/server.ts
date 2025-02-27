@@ -1,23 +1,12 @@
-import express from "express";
-import dotenv from "dotenv";
-import cors from "cors";
+import app from "./app";
+import pool from "./config/db";
 
-import selectRoutes from "./routes/selectRoutes";
-import uploadRoutes from "./routes/uploadRoutes";
+const PORT = process.env.PORT;
 
-dotenv.config();
-
-const app = express();
-const PORT = process.env.PORT || 5000;
-
-app.use(cors());
-app.use(express.json());
-
-app.use("/api", selectRoutes);
-app.use("/api", uploadRoutes);
-
-app.listen(PORT, () => {
-  console.log(`Server running on port: ${PORT}`);
-});
-
-export default app;
+pool
+  .connect()
+  .then(() => {
+    console.log("Berhasil terhubung ke Database");
+    app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
+  })
+  .catch((err) => console.error("Database connection error:", err));
