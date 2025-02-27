@@ -96,12 +96,7 @@ export const uploadDataHandler = async (
       });
     }
 
-    const {
-      kode_balai = "abc1152",
-      kode_bulan = "abc4251",
-      kode_tahun = "abc2387",
-    } = req.body;
-
+    const { kode_balai, kode_bulan, kode_tahun } = req.body;
     if (!kode_balai || !kode_bulan || !kode_tahun) {
       return res.status(400).json({
         status: "Failed",
@@ -111,6 +106,8 @@ export const uploadDataHandler = async (
 
     const extractPath = `./src/repository/${path.parse(file.filename).name}`;
     await extractionFileUpload(file.path, extractPath);
+
+    fs.unlinkSync(file.path);
 
     const vektorData = fs
       .readdirSync(extractPath)
@@ -134,8 +131,10 @@ export const uploadDataHandler = async (
       });
     }
 
+    const nameData = path.parse(vektorData).name;
+
     const uploadData = await updateData(
-      vektorData,
+      nameData,
       kode_balai,
       kode_bulan,
       kode_tahun,
